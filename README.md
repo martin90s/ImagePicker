@@ -1,4 +1,4 @@
-# <img src="http://7xpb9x.com1.z0.glb.clouddn.com/2017/01/19/8d71c2113037f706d5d7f0574a36e953.png" width=32 /> SImagePiker
+# <img src="http://7xpb9x.com1.z0.glb.clouddn.com/2017/01/19/c4cb41c69d38f0284c70ba32c2839983.png" width=48 /> SImagePiker
 
 [![](https://jitpack.io/v/martin90s/ImagePicker.svg)](https://jitpack.io/#martin90s/ImagePicker)
 
