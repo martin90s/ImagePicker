@@ -2,7 +2,8 @@
 
 [![](https://jitpack.io/v/martin90s/ImagePicker.svg)](https://jitpack.io/#martin90s/ImagePicker)
 
-
+# 效果图
+![test.gif](http://7xpb9x.com1.z0.glb.clouddn.com/2017/01/19/891b8bc4cbf06793eb451224e432be79.gif "test.gif")
 # 如何添加
 ### Gradle
 #### 1.在Project的build.gradle 中添加仓库地址
