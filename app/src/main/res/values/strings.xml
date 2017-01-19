@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SImagePicker</string>
+    <string name="general_max_per_image">图片过大，超过200k上限。</string>
+</resources>
