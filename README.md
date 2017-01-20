@@ -3,11 +3,16 @@
 [![](https://jitpack.io/v/martin90s/ImagePicker.svg)](https://jitpack.io/#martin90s/ImagePicker)
 
 ## 效果图
-### 第一张头像模式，第二张选择多张图片（包括动画和顺畅的跳转，第三张是分片加载超大图)
+### 第一张头像模式，第二张选择多张图片（包括动画和顺畅的跳转），第三张是分片加载超大图（19.5M，10000*5000px）
 
 ![image](https://github.com/martin90s/ScreenShot/blob/master/choose_avatar.gif)
 ![image](https://github.com/martin90s/ScreenShot/blob/master/choose_image.gif)
 ![image](https://github.com/martin90s/ScreenShot/blob/master/huge_iamge.gif)
+
+
+该项目的超大图片预览参照了这个项目
+* [subsampling-scale-image-view](https://github.com/davemorrissey/subsampling-scale-image-view) 
+
 
 # 如何添加
 ### Gradle
@@ -77,6 +82,7 @@ allprojects {
 |forResult(int requestCode) | 打开图片选择器，并且传入requestCode
 
 ##获取结果
+### 在调用图片选择器的Fragment或者Activity中
 ```java
 @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -90,3 +96,5 @@ allprojects {
   }
 ```
 
+##联系方式
+* 邮箱地址： martinhi2016@gmail.com
