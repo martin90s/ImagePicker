@@ -9,6 +9,8 @@
 ![image](https://github.com/martin90s/ScreenShot/blob/master/choose_image.gif)
 ![image](https://github.com/martin90s/ScreenShot/blob/master/huge_iamge.gif)
 
+项目介绍请参考
+* [Android-如何开发一个功能强大的图片选择器](http://www.jianshu.com/p/81aeb7e2eaa9)
 
 该项目的超大图片预览参照了这个项目
 * [subsampling-scale-image-view](https://github.com/davemorrissey/subsampling-scale-image-view) 
