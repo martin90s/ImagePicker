@@ -2,10 +2,12 @@
 
 [![](https://jitpack.io/v/martin90s/ImagePicker.svg)](https://jitpack.io/#martin90s/ImagePicker)
 
-## 效果图（第一张头像模式，第二张选择多张图片（包括动画和顺畅的跳转，第三张是分片加载超大图））
+## 效果图
+### 第一张头像模式，第二张选择多张图片（包括动画和顺畅的跳转，第三张是分片加载超大图)
+
 ![image](https://github.com/martin90s/ScreenShot/blob/master/choose_avatar.gif)
 ![image](https://github.com/martin90s/ScreenShot/blob/master/choose_image.gif)
-![image](https://github.com/martin90s/ScreenShot/blob/master/huge_image.gif)
+![image](https://github.com/martin90s/ScreenShot/blob/master/huge_iamge.gif)
 
 # 如何添加
 ### Gradle
