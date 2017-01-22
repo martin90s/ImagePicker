@@ -12,10 +12,9 @@
 项目介绍请参考
 * [Android-如何开发一个功能强大的图片选择器](http://www.jianshu.com/p/81aeb7e2eaa9)
 
-该项目的超大图片预览参照了这个项目
+致谢
 * [subsampling-scale-image-view](https://github.com/davemorrissey/subsampling-scale-image-view) 
-
-
+* y总的页面切换动画
 # 如何添加
 ### Gradle
 #### 1.在Project的build.gradle 中添加仓库地址
