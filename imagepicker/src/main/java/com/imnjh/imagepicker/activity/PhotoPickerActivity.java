@@ -296,14 +296,16 @@ public class PhotoPickerActivity extends BasePickerActivity implements PickerAct
     int firstVisible = layoutManager.findFirstVisibleItemPosition();
     int lastVisible = layoutManager.findLastVisibleItemPosition();
     for (int i = firstVisible; i <= lastVisible; i++) {
-      SquareRelativeLayout item =
-          (SquareRelativeLayout) layoutManager.findViewByPosition(i);
-      if (item != null) {
-        String photoPath = (String) item.getTag();
-        if (photoController.getSelectedPhoto().contains(photoPath)) {
-          item.checkBox.setText(String.valueOf(photoController.getSelectedPhoto()
-              .indexOf(photoPath) + 1));
-          item.checkBox.refresh(false);
+      View view = layoutManager.findViewByPosition(i);
+      if (view instanceof SquareRelativeLayout) {
+        SquareRelativeLayout item = (SquareRelativeLayout) view;
+        if (item != null) {
+          String photoPath = (String) item.getTag();
+          if (photoController.getSelectedPhoto().contains(photoPath)) {
+            item.checkBox.setText(String.valueOf(photoController.getSelectedPhoto()
+                .indexOf(photoPath) + 1));
+            item.checkBox.refresh(false);
+          }
         }
       }
     }

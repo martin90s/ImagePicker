@@ -11,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
         versionCode 2
-        versionName "1.1"
+        versionName "1.2"
     }
 
     buildTypes {
