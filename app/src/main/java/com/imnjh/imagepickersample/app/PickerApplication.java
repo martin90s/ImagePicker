@@ -22,7 +22,7 @@ public class PickerApplication extends Application {
     instance = this;
     SImagePicker.init(new PickerConfig.Builder().setAppContext(this)
         .setImageLoader(new FrescoImageLoader())
-        .setToolbaseColor(getColor(R.color.colorPrimary)).build());
+        .setToolbaseColor(getResources().getColor(R.color.colorPrimary)).build());
   }
 
 
