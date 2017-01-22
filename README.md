@@ -15,6 +15,8 @@
 致谢
 * [subsampling-scale-image-view](https://github.com/davemorrissey/subsampling-scale-image-view) 
 * y总的页面切换动画
+
+
 # 如何添加
 ### Gradle
 #### 1.在Project的build.gradle 中添加仓库地址
