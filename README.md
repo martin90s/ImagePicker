@@ -99,5 +99,9 @@ allprojects {
   }
 ```
 
+##TODO
+* 增加一个普通模式。由于现在预览为了支持超大图所以选择了SubsamplingView。后续增加一个不支持超大图的模式，会更加流畅
+* Glide下由于glide的缓存策略，跳转动画第一次播放会闪一下，下版修复此问题
+
 ##联系方式
 * 邮箱地址： martinhi2016@gmail.com
