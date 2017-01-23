@@ -1,6 +1,7 @@
-# <img src="http://7xpb9x.com1.z0.glb.clouddn.com/2017/01/19/c4cb41c69d38f0284c70ba32c2839983.png" width=48 /> SImagePicker
+# <img src="http://7xpb9x.com1.z0.glb.clouddn.com/2017/01/19/c4cb41c69d38f0284c70ba32c2839983.png" width=48 />SImagePicker
 
-[![](https://jitpack.io/v/martin90s/ImagePicker.svg)](https://jitpack.io/#martin90s/ImagePicker)
+[![](https://jitpack.io/v/martin90s/ImagePicker.svg)](https://jitpack.io/#martin90s/ImagePicker)  [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-SImagePicker-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5129)
+
 
 ## 效果图
 ### 第一张头像模式，第二张选择多张图片（包括动画和顺畅的跳转），第三张是分片加载超大图（19.5M，10000*5000px）
