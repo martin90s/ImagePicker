@@ -39,7 +39,7 @@ allprojects {
 #### 2.在app目录下的build.gradle中添加依赖
 ```gradle
     //SImagePicker
-	compile 'com.github.martin90s:ImagePicker:v1.2'
+	compile 'com.github.martin90s:ImagePicker:v1.3.1'
 ```
 
 # 如何使用
