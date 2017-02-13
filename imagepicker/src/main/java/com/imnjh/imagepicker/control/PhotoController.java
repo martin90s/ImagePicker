@@ -6,16 +6,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import rx.Observable;
-
 import com.imnjh.imagepicker.CapturePhotoHelper;
+import com.imnjh.imagepicker.PhotoLoadListener;
 import com.imnjh.imagepicker.R;
 import com.imnjh.imagepicker.SImagePicker;
 import com.imnjh.imagepicker.adapter.CommonHeaderFooterAdapter;
@@ -135,7 +133,7 @@ public class PhotoController extends BaseLoaderController {
     photoAdapter.setSelectedPhoto(selectedPhoto);
   }
 
-  public Observable<ArrayList<Uri>> getAllPhoto() {
-    return photoAdapter.getAllPhoto();
+  public void getAllPhoto(PhotoLoadListener photoLoadListener) {
+    photoAdapter.getAllPhoto(photoLoadListener);
   }
 }

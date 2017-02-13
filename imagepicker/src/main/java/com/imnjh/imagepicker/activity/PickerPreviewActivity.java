@@ -32,8 +32,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import rx.functions.Action1;
-
 import com.imnjh.imagepicker.FileChooseInterceptor;
 import com.imnjh.imagepicker.PickerAction;
 import com.imnjh.imagepicker.R;
@@ -47,7 +45,6 @@ import com.imnjh.imagepicker.widget.PicturePreviewPageView;
 import com.imnjh.imagepicker.widget.PreviewViewPager;
 import com.imnjh.imagepicker.widget.subsamplingview.ImageSource;
 import com.imnjh.imagepicker.widget.subsamplingview.OnImageEventListener;
-import com.jakewharton.rxbinding.view.RxView;
 
 /**
  * Created by Martin on 2017/1/17.
@@ -273,9 +270,9 @@ public class PickerPreviewActivity extends BasePickerActivity implements PickerA
     startEnterAnimation(uris.get(viewPager.getCurrentItem()));
 
     previewBottomLayout.originalCheckbox.setChecked(selectOriginal);
-    RxView.clicks(previewBottomLayout.send).subscribe(new Action1<Void>() {
+    previewBottomLayout.send.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void call(Void aVoid) {
+      public void onClick(View v) {
         send();
       }
     });

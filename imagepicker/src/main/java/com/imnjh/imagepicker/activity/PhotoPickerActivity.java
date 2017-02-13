@@ -15,12 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-
 import com.imnjh.imagepicker.CapturePhotoHelper;
 import com.imnjh.imagepicker.FileChooseInterceptor;
+import com.imnjh.imagepicker.PhotoLoadListener;
 import com.imnjh.imagepicker.PickerAction;
 import com.imnjh.imagepicker.R;
 import com.imnjh.imagepicker.SImagePicker;
@@ -34,7 +31,6 @@ import com.imnjh.imagepicker.util.FileUtil;
 import com.imnjh.imagepicker.widget.GridInsetDecoration;
 import com.imnjh.imagepicker.widget.PickerBottomLayout;
 import com.imnjh.imagepicker.widget.SquareRelativeLayout;
-import com.jakewharton.rxbinding.view.RxView;
 
 
 /**
@@ -104,21 +100,25 @@ public class PhotoPickerActivity extends BasePickerActivity implements PickerAct
         @Override
         public void onPreview(final int position, Photo photo, final View view) {
           if (mode == SImagePicker.MODE_IMAGE) {
-            deposit(photoController.getAllPhoto().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Uri>>() {
-                  @Override
-                  public void call(ArrayList<Uri> uris) {
-                    if (!CollectionUtils.isEmpty(uris)) {
-                      PickerPreviewActivity.startPicturePreviewFromPicker(PhotoPickerActivity.this,
-                          uris, photoController.getSelectedPhoto(), position,
-                          bottomLayout.originalCheckbox.isChecked(), maxCount, rowCount,
-                          fileChooseInterceptor,
-                          pickRes, pickNumRes,
-                          PickerPreviewActivity.AnchorInfo.newInstance(view),
-                          REQUEST_CODE_PICKER_PREVIEW);
-                    }
-                  }
-                }));
+            photoController.getAllPhoto(new PhotoLoadListener() {
+              @Override
+              public void onLoadComplete(ArrayList<Uri> photoUris) {
+                if (!CollectionUtils.isEmpty(photoUris)) {
+                  PickerPreviewActivity.startPicturePreviewFromPicker(PhotoPickerActivity.this,
+                      photoUris, photoController.getSelectedPhoto(), position,
+                      bottomLayout.originalCheckbox.isChecked(), maxCount, rowCount,
+                      fileChooseInterceptor,
+                      pickRes, pickNumRes,
+                      PickerPreviewActivity.AnchorInfo.newInstance(view),
+                      REQUEST_CODE_PICKER_PREVIEW);
+                }
+              }
+
+              @Override
+              public void onLoadError() {
+
+              }
+            });
           } else if (mode == SImagePicker.MODE_AVATAR) {
             CropImageActivity.startImageCrop(PhotoPickerActivity.this, photo.getFilePath(),
                 REQUEST_CODE_CROP_IMAGE, avatarFilePath);
@@ -179,10 +179,9 @@ public class PhotoPickerActivity extends BasePickerActivity implements PickerAct
     toolbar.addView(albumSpinner);
     albumController.onCreate(this, albumSpinner, directorySelectListener);
     albumController.loadAlbums();
-
-    RxView.clicks(bottomLayout.send).subscribe(new Action1<Void>() {
+    bottomLayout.send.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void call(Void aVoid) {
+      public void onClick(View v) {
         commit();
       }
     });

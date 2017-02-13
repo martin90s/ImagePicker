@@ -6,19 +6,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-
 import com.imnjh.imagepicker.R;
 import com.imnjh.imagepicker.util.ImageUtil;
+import com.imnjh.imagepicker.util.SystemUtil;
 import com.imnjh.imagepicker.widget.ClipImageLayout;
 
 
@@ -95,28 +91,27 @@ public class CropImageActivity extends BasePickerActivity {
     this.sourcePath = sourcePath;
     this.sampleSize = 0;
     if (!TextUtils.isEmpty(sourcePath)) {
-      deposit(Observable.create(new Observable.OnSubscribe<Bitmap>() {
+      new AsyncTask<Void, Void, Void>() {
+
         @Override
-        public void call(Subscriber<? super Bitmap> subscriber) {
+        protected Void doInBackground(Void... params) {
           try {
             sampleSize = calculateBitmapSampleSize(sourcePath);
-            subscriber.onNext(ImageUtil.loadBitmap(sourcePath, sampleSize));
-            subscriber.onCompleted();
+            final Bitmap bitmap = ImageUtil.loadBitmap(sourcePath, sampleSize);
+            if (bitmap != null) {
+              SystemUtil.runOnUIThread(new Runnable() {
+                @Override
+                public void run() {
+                  startCrop(bitmap);
+                }
+              });
+            }
           } catch (IOException e) {
             e.printStackTrace();
-            subscriber.onError(e);
           }
+          return null;
         }
-      }).subscribeOn(Schedulers.computation())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Action1<Bitmap>() {
-            @Override
-            public void call(Bitmap bitmap) {
-              if (bitmap != null) {
-                startCrop(bitmap);
-              }
-            }
-          }));
+      }.execute();
     }
   }
 
@@ -148,34 +143,22 @@ public class CropImageActivity extends BasePickerActivity {
 
   private void clipImage() {
     final Bitmap bitmap = clipImageLayout.clip();
-    deposit(Observable.create(new Observable.OnSubscribe<Void>() {
+    new AsyncTask<Void, Void, Boolean>() {
 
       @Override
-      public void call(Subscriber<? super Void> subscriber) {
-        if (ImageUtil.saveBitmap(bitmap, filePath, Bitmap.CompressFormat.JPEG, 85)) {
-          subscriber.onNext(null);
-          subscriber.onCompleted();
-        } else {
-          subscriber.onError(null);
-        }
+      protected Boolean doInBackground(Void... params) {
+        return ImageUtil.saveBitmap(bitmap, filePath, Bitmap.CompressFormat.JPEG, 85);
       }
-    }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Subscriber<Void>() {
-          @Override
-          public void onCompleted() {}
 
-          @Override
-          public void onError(Throwable e) {
-            finish();
-          }
-
-          @Override
-          public void onNext(Void aVoid) {
-            Intent intent = new Intent();
-            intent.putExtra(RESULT_PATH, filePath);
-            setResult(RESULT_OK, intent);
-            finish();
-          }
-        }));
+      @Override
+      protected void onPostExecute(Boolean success) {
+        if (success) {
+          Intent intent = new Intent();
+          intent.putExtra(RESULT_PATH, filePath);
+          setResult(RESULT_OK, intent);
+        }
+        finish();
+      }
+    }.execute();
   }
 }

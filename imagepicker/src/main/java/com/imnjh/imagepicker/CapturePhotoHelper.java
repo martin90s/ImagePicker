@@ -7,13 +7,16 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 
 import com.imnjh.imagepicker.activity.CaptureTempActivity;
 import com.imnjh.imagepicker.util.DeviceCompat;
@@ -68,7 +71,19 @@ public class CapturePhotoHelper {
       if (photoFile == null) {
         return;
       }
-      Uri uri = Uri.fromFile(photoFile);
+      Context context;
+      if (fragment != null) {
+        context = fragment.getContext();
+      } else {
+        context = activity;
+      }
+      Uri uri;
+      if (Build.VERSION.SDK_INT >= 24) {
+        uri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()
+            + ".provider", this.photoFile);
+      } else {
+        uri = Uri.fromFile(photoFile);
+      }
       if (DeviceCompat.getROM() == DeviceCompat.ROM.SONY) {
         Intent intent = new Intent();
         intent.setClass(fragment.getActivity(), CaptureTempActivity.class);

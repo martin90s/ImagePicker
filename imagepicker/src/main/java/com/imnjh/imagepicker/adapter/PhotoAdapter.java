@@ -1,7 +1,6 @@
 package com.imnjh.imagepicker.adapter;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,23 +8,20 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action1;
-
+import com.imnjh.imagepicker.PhotoLoadListener;
 import com.imnjh.imagepicker.R;
 import com.imnjh.imagepicker.SImagePicker;
 import com.imnjh.imagepicker.model.Photo;
 import com.imnjh.imagepicker.util.SystemUtil;
 import com.imnjh.imagepicker.util.UriUtil;
 import com.imnjh.imagepicker.widget.SquareRelativeLayout;
-import com.jakewharton.rxbinding.view.RxView;
 
 /**
  * Created by Martin on 2017/1/17.
@@ -62,21 +58,19 @@ public class PhotoAdapter extends BaseRecycleCursorAdapter<RecyclerView.ViewHold
     SImagePicker.getPickerConfig().getImageLoader().bindImage(holder.photoCell.photo,
         new Uri.Builder().scheme(UriUtil.LOCAL_FILE_SCHEME)
             .path(photo.getFilePath()).build(), photoSize, photoSize);
-    RxView.clicks(holder.photoCell.photo).throttleFirst(500, TimeUnit.MILLISECONDS)
-        .subscribe(new Action1<Void>() {
-          @Override
-          public void call(Void aVoid) {
-            actionListener.onPreview(position, photo, originHolder.itemView);
-          }
-        });
+    holder.photoCell.photo.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        actionListener.onPreview(position, photo, originHolder.itemView);
+      }
+    });
     if (mode == SImagePicker.MODE_IMAGE) {
-      RxView.clicks(holder.photoCell.checkBox).throttleFirst(500, TimeUnit.MILLISECONDS)
-          .subscribe(new Action1<Void>() {
-            @Override
-            public void call(Void aVoid) {
-              PhotoAdapter.this.onCheckStateChange(holder.photoCell, photo);
-            }
-          });
+      holder.photoCell.checkBox.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          PhotoAdapter.this.onCheckStateChange(holder.photoCell, photo);
+        }
+      });
     } else if (mode == SImagePicker.MODE_AVATAR) {
       holder.photoCell.checkBox.setVisibility(View.INVISIBLE);
     }
@@ -159,24 +153,39 @@ public class PhotoAdapter extends BaseRecycleCursorAdapter<RecyclerView.ViewHold
     notifyDataSetChanged();
   }
 
-  public Observable<ArrayList<Uri>> getAllPhoto() {
-    return rx.Observable.create(new rx.Observable.OnSubscribe<ArrayList<Uri>>() {
+  public void getAllPhoto(final PhotoLoadListener photoLoadListener) {
+    new AsyncTask<Void, Void, Void>() {
+
       @Override
-      public void call(Subscriber<? super ArrayList<Uri>> subscriber) {
+      protected Void doInBackground(Void... params) {
         try {
-          ArrayList<Uri> result = new ArrayList<>();
+          final ArrayList<Uri> result = new ArrayList<>();
           mCursor.moveToPosition(-1);
           while (mCursor.moveToNext()) {
             result.add(new Uri.Builder().scheme(UriUtil.LOCAL_FILE_SCHEME).path(
                 Photo.fromCursor(mCursor).getFilePath()).build());
           }
-          subscriber.onNext(result);
-          subscriber.onCompleted();
+          SystemUtil.runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+              if (photoLoadListener != null) {
+                photoLoadListener.onLoadComplete(result);
+              }
+            }
+          });
         } catch (Exception e) {
-          subscriber.onError(e);
+          SystemUtil.runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+              if (photoLoadListener != null) {
+                photoLoadListener.onLoadError();
+              }
+            }
+          });
         }
+        return null;
       }
-    });
+    }.execute();
   }
 
   public void setMaxCount(int maxCount) {
